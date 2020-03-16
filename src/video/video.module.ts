@@ -6,22 +6,15 @@ import config from '../config';
 import { VideoResolver } from './video.resolver';
 import { VideoService } from './video.service';
 import { VideoController } from './video.controller';
+import { UploadsController } from './uploads.controller';
 
 @Module({
   imports: [
     MulterModule.register({
       dest: config.uploadPath,
-      // fileFilter: (
-      //   req,
-      //   { path, filename },
-      //   callback
-      // ) => {
-      //   createThumb(path).then
-
-      // }
     }),
   ],
   providers: [VideoResolver, VideoService],
-  controllers: [VideoController],
+  controllers: [VideoController, UploadsController],
 })
 export class VideoModule { }
