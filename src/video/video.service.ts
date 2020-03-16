@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import * as path from 'path';
+import * as fs from 'fs';
+
+import config from '../config';
 
 import { Video } from './video.model';
 import { NewVideoInput } from './dto';
-
 
 const mockVids: NewVideoInput[] = [
   {
@@ -57,7 +60,14 @@ export class VideoService {
   }
 
   async remove(id: string): Promise<boolean> {
-    this.videos = this.videos.filter(v => v.id !== id);
-    return true;
+    const v = this.videos.find(v => v.id === id);
+    if (v) {
+      this.videos = this.videos.filter(v => v.id !== id);
+      const filePath = path.join(config.uploadPath, v.filename);
+      if (fs.existsSync(filePath))
+        fs.unlinkSync(filePath);
+      return true;
+    } else
+      return false;
   }
 }
