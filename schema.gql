@@ -16,7 +16,7 @@ type Mutation {
 input NewVideoInput {
   title: String!
   filename: String!
-  filenameOrg: String
+  uploadPath: String!
   description: String
 }
 
@@ -29,7 +29,7 @@ type Video {
   id: ID!
   title: String!
   filename: String!
-  filenameOrg: String
+  path: String!
   description: String
   creationDate: DateTime!
 }

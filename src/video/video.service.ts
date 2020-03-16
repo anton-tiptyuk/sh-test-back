@@ -11,10 +11,12 @@ const mockVids: NewVideoInput[] = [
   {
     title: 'sample video',
     filename: 'any',
+    uploadPath: 'wrongPath',
   },
   {
     title: 'another video',
     filename: 'differentFile',
+    uploadPath: 'wrongPath',
     description: 'description is present',
   },
 ];
@@ -39,11 +41,14 @@ export class VideoService {
   }
 
   async create(data: NewVideoInput): Promise<Video> {
+    const { uploadPath, ...videoData } = data;
+
     const id = (++this.idSequence).toString();
     const v = {
       id,
+      path: uploadPath,
       creationDate: new Date(),
-      ...data,
+      ...videoData,
     } as Video;
 
     this.videos.push(v);
@@ -63,7 +68,7 @@ export class VideoService {
     const v = this.videos.find(v => v.id === id);
     if (v) {
       this.videos = this.videos.filter(v => v.id !== id);
-      const filePath = path.join(config.uploadPath, v.filename);
+      const filePath = path.join(config.uploadPath, v.path);
       if (fs.existsSync(filePath))
         fs.unlinkSync(filePath);
       return true;

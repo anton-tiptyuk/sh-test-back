@@ -11,8 +11,8 @@ export class Video {
   @Field()
   filename: string;
 
-  @Field({ nullable: true })
-  filenameOrg?: string;
+  @Field()
+  path: string;
 
   @Field({ nullable: true })
   description?: string;
