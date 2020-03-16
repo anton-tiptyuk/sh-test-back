@@ -3,6 +3,7 @@
 
 const config = {
   uploadPath: `${__dirname}/uploads`,
+  externalUploadPath: '/uploads',
 };
 
 export default config;

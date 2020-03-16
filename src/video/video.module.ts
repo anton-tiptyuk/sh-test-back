@@ -11,6 +11,14 @@ import { VideoController } from './video.controller';
   imports: [
     MulterModule.register({
       dest: config.uploadPath,
+      // fileFilter: (
+      //   req,
+      //   { path, filename },
+      //   callback
+      // ) => {
+      //   createThumb(path).then
+
+      // }
     }),
   ],
   providers: [VideoResolver, VideoService],

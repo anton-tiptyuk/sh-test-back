@@ -12,11 +12,13 @@ const mockVids: NewVideoInput[] = [
     title: 'sample video',
     filename: 'any',
     uploadPath: 'wrongPath',
+    thumbnailPath: 'wrongThumbPath',
   },
   {
     title: 'another video',
     filename: 'differentFile',
     uploadPath: 'wrongPath',
+    thumbnailPath: 'wrongThumbPath',
     description: 'description is present',
   },
 ];

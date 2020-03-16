@@ -1,5 +1,9 @@
 import { Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { join } from 'path';
+
+import config from '../config';
+import { createThumb } from '../common/thumbnails';
 
 // I did cheat a little bit.
 // Occasionally i've come across the repo:
@@ -18,7 +22,14 @@ export class VideoController {
   @UseInterceptors(FileInterceptor('file'))
   @Post()
   async uploadFile(@UploadedFile() file: any) {
-    return file;
+    const { path, filename }: { path: string, filename: string } = file;
+
+    const thumbnailPath = await createThumb(path);
+
+    return {
+      filename: join(config.externalUploadPath, filename),
+      thumbnailPath: join(config.externalUploadPath, thumbnailPath),
+    };
   }
 
 }

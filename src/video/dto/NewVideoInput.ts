@@ -15,6 +15,10 @@ export class NewVideoInput {
   @MaxLength(50)
   uploadPath: string;
 
+  @Field()
+  @MaxLength(50)
+  thumbnailPath: string;
+
   @Field({ nullable: true })
   @IsOptional()
   @MaxLength(255)
