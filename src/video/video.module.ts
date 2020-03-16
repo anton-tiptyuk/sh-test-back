@@ -6,6 +6,7 @@ import config from '../config';
 import { VideoResolver } from './video.resolver';
 import { VideoService } from './video.service';
 import { VideoController } from './video.controller';
+import { UploadScalar } from './video.upload';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { VideoController } from './video.controller';
       dest: config.uploadPath,
     }),
   ],
-  providers: [VideoResolver, VideoService],
+  providers: [VideoResolver, UploadScalar, VideoService],
   controllers: [VideoController],
 })
 export class VideoModule { }
