@@ -4,6 +4,7 @@
 const config = {
   uploadPath: `${__dirname}/uploads`,
   externalUploadPath: '/uploads',
+  createThumbnails: true,
 };
 
 export default config;
