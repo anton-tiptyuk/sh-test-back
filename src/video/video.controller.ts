@@ -1,4 +1,5 @@
-import { Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Post, UploadedFile, UseInterceptors, Get, Param, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { join } from 'path';
 
@@ -17,10 +18,10 @@ import { createThumb } from '../common/thumbnails';
 // https://www.apollographql.com/docs/apollo-server/data/file-uploads/
 // https://github.com/apollographql/graphql-tools/issues/671
 
-@Controller('video')
+@Controller()
 export class VideoController {
   @UseInterceptors(FileInterceptor('file'))
-  @Post()
+  @Post('video')
   async uploadFile(@UploadedFile() file: any) {
     const { path, filename }: { path: string, filename: string } = file;
 
@@ -32,4 +33,14 @@ export class VideoController {
     };
   }
 
+  @Get('uploads/:fileId')
+  async serveUpload(
+    @Param('fileId') fileId: string,
+    @Res() res: Response
+  ): Promise<any> {
+    res.sendFile(
+      fileId,
+      { root: config.uploadPath }
+    );
+  }
 }
