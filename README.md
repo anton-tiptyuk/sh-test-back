@@ -1,83 +1,53 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+This project is built with [Nest](https://github.com/nestjs/nest) framework.
 
-[travis-image]: https://api.travis-ci.org/nestjs/nest.svg?branch=master
-[travis-url]: https://travis-ci.org/nestjs/nest
-[linux-image]: https://img.shields.io/travis/nestjs/nest/master.svg?label=linux
-[linux-url]: https://travis-ci.org/nestjs/nest
-  
-  <p align="center">A progressive <a href="http://nodejs.org" target="blank">Node.js</a> framework for building efficient and scalable server-side applications, heavily inspired by <a href="https://angular.io" target="blank">Angular</a>.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/dm/@nestjs/core.svg" alt="NPM Downloads" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://api.travis-ci.org/nestjs/nest.svg?branch=master" alt="Travis" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://img.shields.io/travis/nestjs/nest/master.svg?label=linux" alt="Linux" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#5" alt="Coverage" /></a>
-<a href="https://gitter.im/nestjs/nestjs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge"><img src="https://badges.gitter.im/nestjs/nestjs.svg" alt="Gitter" /></a>
-<a href="https://opencollective.com/nest#backer"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec"><img src="https://img.shields.io/badge/Donate-PayPal-dc3d53.svg"/></a>
-  <a href="https://twitter.com/nestframework"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Initializing
 
-## Description
+To create thumbnails i've used npm package `video-thumbnail-generator` which requires `ffmpeg` to be installed.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
+For MacOS it was enough to:
 ```
+brew install ffmpeg
+```
+There is also a way to get by without thumbnails.
 
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+Once it is ready - init things in common npm project way:
+```
+npm install
+npm start
 ```
 
 ## Test
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
+$ npm run test
+```
+Tests are not numerous.
+There are some default dummy NestJS tests (which are created by CLI when you create services/controllers), but i've generalized them with some helper to avoid repetition.
+Also i've created a stupid unit test `src/video/video.service.spec.ts` just to show that i've got overall idea of what Jest is about.
 
-## Support
+## No thumbs
+If for some reason it is a problem to have `ffmpeg` installed you can get by patching `src/config.ts` config file setting `createThumbnails` param to `false`. The UI would look lame, there would be 404s for missing thumbnails but overall things would work and you should be fine to play videos.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## 2dos:
 
-## Stay in touch
+### graphQl uploads
+I did cheat a little bit.
+Occasionally i've come across the repo:
+https://github.com/jamesb3ll/mytube-react-graphql
+and found out there's a way to hanlde file upload staying within graphQL API
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Trying to do something similar i stuck with the fact that currently
+'graphql-tools' i am using is not capable of mapping all things for
+that upload and i gave up for now
+https://www.apollographql.com/docs/apollo-server/data/file-uploads/
+https://github.com/apollographql/graphql-tools/issues/671
 
-## License
+That is why i just upload files with REST `multipart/form-data` request.
 
-  Nest is [MIT licensed](LICENSE).
+Leftovers of what i tried are in `wrong-way-gql-upload` but again i don't think it is worth seeing.
 
+### security issues
+That thumbnail creating lib introduced severe security issues into the project. Since this one is a sample i did not bother solving this problem. In real life if that vulnerability is serious (which may come out of nature of that `ffmpeg` external lib or something) that might be solved by separating thumbnail creation from the server itself, into the lambda or othem microservice, for instance. I mean other thumbnail packages still depend on that lib and might share the same vulnerabilities.
 
-------
-
-brew install ffmpeg
-
-
-
+### database
+I even forgot i was going to replace inmemory array of videos with some database (initially i was going to use mongo but eventually i just left it as is), got that used to this state of things that even forgot to mention.
