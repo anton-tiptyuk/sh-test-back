@@ -27,22 +27,18 @@ const mockVids: NewVideoInput[] = [
 export class VideoService {
   private idSequence: number;
   private videos: Video[];
+
   constructor() {
     this.idSequence = 0;
     this.videos = [];
-
     this.createMocks();
   }
 
-  async createMocks() {
-    let i = 0;
-    while (i < mockVids.length) {
-      await this.create(mockVids[i]);
-      ++i;
-    }
+  createMocks() {
+    mockVids.forEach(v => this.create(v));
   }
 
-  async create(data: NewVideoInput): Promise<Video> {
+  create(data: NewVideoInput): Video {
     const { uploadPath, ...videoData } = data;
 
     const id = (++this.idSequence).toString();
